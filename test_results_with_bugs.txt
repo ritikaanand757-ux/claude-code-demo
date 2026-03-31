@@ -1,0 +1,176 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.0, pytest-7.4.3
+collected 25 items
+
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_get_empty_tasks PASSED                                [  4%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_create_task_with_all_fields PASSED                    [  8%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_create_task_with_priority_only PASSED                 [ 12%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_create_task_with_invalid_priority PASSED              [ 16%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_create_task_without_title PASSED                      [ 20%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_get_tasks_with_data PASSED                            [ 24%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_filter_tasks_by_priority PASSED                       [ 28%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_filter_tasks_by_completed_status PASSED               [ 32%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_filter_tasks_by_priority_and_status PASSED            [ 36%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_get_task_by_id PASSED                                 [ 40%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_get_nonexistent_task PASSED                           [ 44%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_task_priority FAILED                           [ 48%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_task_tags FAILED                               [ 52%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_task_due_date FAILED                           [ 56%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_task_completion_status FAILED                  [ 60%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_nonexistent_task FAILED                        [ 64%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_task_with_invalid_priority PASSED              [ 68%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_delete_task PASSED                                    [ 72%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_delete_nonexistent_task PASSED                        [ 76%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_pagination PASSED                                     [ 80%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_create_task_default_priority PASSED                   [ 84%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_filter_with_invalid_priority PASSED                   [ 88%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_complete_workflow FAILED                              [ 92%]
+tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_complete_workflow FAILED                              [100%]
+
+================================== FAILURES ===================================
+
+_________________ TestEnhancedTaskAPI.test_update_task_priority ______________
+
+self = <tests.test_enhanced_api.TestEnhancedTaskAPI object>
+client = <starlette.testclient.TestClient object>
+
+    def test_update_task_priority(self, client):
+        """Test updating task priority"""
+        # Create a task
+        task_data = {"title": "Task to Update", "priority": "low"}
+        create_response = client.post("/api/tasks/", json=task_data)
+        task_id = create_response.json()["id"]
+
+        # Update priority
+        update_data = {"priority": "high"}
+        response = client.put(f"/api/tasks/{task_id}", json=update_data)
+>       assert response.status_code == status.HTTP_200_OK
+E       AssertionError: assert 201 == 200
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_enhanced_api.py:159: AssertionError
+
+___________________ TestEnhancedTaskAPI.test_update_task_tags ________________
+
+self = <tests.test_enhanced_api.TestEnhancedTaskAPI object>
+client = <starlette.testclient.TestClient object>
+
+    def test_update_task_tags(self, client):
+        """Test updating task tags"""
+        # Create a task
+        task_data = {"title": "Task with Tags", "tags": "old-tag"}
+        create_response = client.post("/api/tasks/", json=task_data)
+        task_id = create_response.json()["id"]
+
+        # Update tags
+        update_data = {"tags": "new-tag, updated"}
+        response = client.put(f"/api/tasks/{task_id}", json=update_data)
+>       assert response.status_code == status.HTTP_200_OK
+E       AssertionError: assert 201 == 200
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_enhanced_api.py:174: AssertionError
+
+_______________ TestEnhancedTaskAPI.test_update_task_due_date _________________
+
+self = <tests.test_enhanced_api.TestEnhancedTaskAPI object>
+client = <starlette.testclient.TestClient object>
+
+    def test_update_task_due_date(self, client):
+        """Test updating task due date"""
+        # Create a task
+        task_data = {"title": "Task with Due Date"}
+        create_response = client.post("/api/tasks/", json=task_data)
+        task_id = create_response.json()["id"]
+
+        # Update due date
+        new_due_date = (datetime.now() + timedelta(days=3)).isoformat()
+        update_data = {"due_date": new_due_date}
+        response = client.put(f"/api/tasks/{task_id}", json=update_data)
+>       assert response.status_code == status.HTTP_200_OK
+E       AssertionError: assert 201 == 200
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_enhanced_api.py:189: AssertionError
+
+__________ TestEnhancedTaskAPI.test_update_task_completion_status ____________
+
+self = <tests.test_enhanced_api.TestEnhancedTaskAPI object>
+client = <starlette.testclient.TestClient object>
+
+    def test_update_task_completion_status(self, client):
+        """Test updating task completion status"""
+        # Create a task
+        task_data = {"title": "Task to Complete", "completed": False}
+        create_response = client.post("/api/tasks/", json=task_data)
+        task_id = create_response.json()["id"]
+
+        # Mark as completed
+        update_data = {"completed": True}
+        response = client.put(f"/api/tasks/{task_id}", json=update_data)
+>       assert response.status_code == status.HTTP_200_OK
+E       AssertionError: assert 201 == 200
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_enhanced_api.py:204: AssertionError
+
+_____________ TestEnhancedTaskAPI.test_update_nonexistent_task _______________
+
+self = <tests.test_enhanced_api.TestEnhancedTaskAPI object>
+client = <starlette.testclient.TestClient object>
+
+    def test_update_nonexistent_task(self, client):
+        """Test updating a task that doesn't exist returns 404"""
+        update_data = {"title": "Updated Title"}
+        response = client.put("/api/tasks/99999", json=update_data)
+>       assert response.status_code == status.HTTP_404_NOT_FOUND
+E       AssertionError: assert 400 == 404
+E        +  where 400 = <Response [400 Bad Request]>.status_code
+
+tests/test_enhanced_api.py:211: AssertionError
+
+_______________ TestEnhancedTaskAPI.test_complete_workflow ___________________
+
+self = <tests.test_enhanced_api.TestEnhancedTaskAPI object>
+client = <starlette.testclient.TestClient object>
+
+    def test_complete_workflow(self, client):
+        """Test complete CRUD workflow for a task"""
+        # 1. Create a task
+        task_data = {
+            "title": "Complete Workflow Test",
+            "description": "Testing full lifecycle",
+            "priority": "high",
+            "tags": "test, workflow",
+            "completed": False
+        }
+        create_response = client.post("/api/tasks/", json=task_data)
+        assert create_response.status_code == status.HTTP_201_CREATED
+        task_id = create_response.json()["id"]
+
+        # 2. Read the task
+        get_response = client.get(f"/api/tasks/{task_id}")
+        assert get_response.status_code == status.HTTP_200_OK
+        assert get_response.json()["title"] == "Complete Workflow Test"
+
+        # 3. Update the task
+        update_data = {"completed": True, "priority": "low"}
+        update_response = client.put(f"/api/tasks/{task_id}", json=update_data)
+>       assert update_response.status_code == status.HTTP_200_OK
+E       AssertionError: assert 201 == 200
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_enhanced_api.py:285: AssertionError
+
+=========================== short test summary info ===========================
+FAILED tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_task_priority - AssertionError: assert 201 == 200
+FAILED tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_task_tags - AssertionError: assert 201 == 200
+FAILED tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_task_due_date - AssertionError: assert 201 == 200
+FAILED tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_task_completion_status - AssertionError: assert 201 == 200
+FAILED tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_update_nonexistent_task - AssertionError: assert 400 == 404
+FAILED tests/test_enhanced_api.py::TestEnhancedTaskAPI::test_complete_workflow - AssertionError: assert 201 == 200
+======================== 6 failed, 19 passed in 2.43s =========================
+
+🐛 BUGS IDENTIFIED:
+1. PUT /api/tasks/{id} is returning HTTP 201 CREATED instead of HTTP 200 OK
+2. PUT /api/tasks/{nonexistent_id} is returning HTTP 400 BAD REQUEST instead of HTTP 404 NOT FOUND
