@@ -30,6 +30,7 @@ class User(Base):
         email (str): Unique email address (required, indexed)
         hashed_password (str): Hashed password (required)
         is_active (bool): Whether the user account is active (default: True)
+        is_admin (bool): Whether the user has admin privileges (default: False)
         created_at (datetime): Timestamp when user was created (auto-generated)
         updated_at (datetime): Timestamp when user was last updated (auto-updated)
     """
@@ -41,6 +42,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=False, index=True)
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
+    is_admin = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

@@ -9,11 +9,26 @@
 <body>
     <div class="container">
         <header>
-            <h1>Task Manager</h1>
-            <p class="subtitle">Organize your tasks efficiently</p>
+            <div class="header-content">
+                <div>
+                    <h1>Task Manager</h1>
+                    <p class="subtitle">Organize your tasks efficiently</p>
+                </div>
+                <div class="auth-section">
+                    <div id="authButtons" class="auth-buttons">
+                        <button id="loginBtn" class="btn btn-primary">Login</button>
+                        <button id="registerBtn" class="btn btn-secondary">Register</button>
+                    </div>
+                    <div id="userInfo" class="user-info" style="display: none;">
+                        <span class="user-welcome">Welcome, <strong id="username"></strong></span>
+                        <span id="userRole" class="user-role"></span>
+                        <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                    </div>
+                </div>
+            </div>
         </header>
 
-        <main>
+        <main id="mainContent" style="display: none;">
             <!-- Search Bar -->
             <section class="search-section">
                 <div class="search-container">
@@ -248,6 +263,99 @@
         </div>
     </div>
 
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email <span class="required">*</span></label>
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password <span class="required">*</span></label>
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+                <div id="loginError" class="error-message" style="display: none;"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+            <p class="modal-footer-text">
+                Don't have an account? <a href="#" id="switchToRegister">Register here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Register</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerUsername">Username <span class="required">*</span></label>
+                    <input
+                        type="text"
+                        id="registerUsername"
+                        name="username"
+                        placeholder="Choose a username"
+                        required
+                        minlength="3"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email <span class="required">*</span></label>
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password <span class="required">*</span></label>
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        name="password"
+                        placeholder="Choose a password (min 8 characters)"
+                        required
+                        minlength="8"
+                    >
+                </div>
+                <div id="registerError" class="error-message" style="display: none;"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+            <p class="modal-footer-text">
+                Already have an account? <a href="#" id="switchToLogin">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="/static/auth.js"></script>
     <script src="/static/app.js"></script>
 </body>
 </html>
