@@ -16,8 +16,24 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
+    # PostgreSQL service container
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: taskmanager_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/taskmanager_db
 
     steps:
       - name: Checkout code
@@ -33,6 +49,18 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          echo "✅ PostgreSQL is ready!"
+
+      - name: Run database migrations
+        run: |
+          alembic upgrade head
 
       - name: Run tests
         run: |
@@ -48,14 +76,65 @@ jobs:
             exit 1
           fi
 
-  # Job 2: Auto Code Quality Check - runs on every pull request
+  # Job 2a: Black formatting check - runs on every pull request (no database needed)
+  auto-black-check:
+    name: Auto Black Formatting Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Black
+        run: |
+          python -m pip install --upgrade pip
+          pip install black
+
+      - name: Run Black code formatting check
+        run: |
+          python -m black backend/ --check
+
+      - name: Report status
+        if: always()
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "✅ Black formatting check passed!"
+          else
+            echo "❌ Black formatting check failed!"
+            exit 1
+          fi
+
+  # Job 2b: Auto Code Quality Check - runs tests on every pull request
   auto-code-quality-check:
     name: Auto Code Quality Check
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 
+    # PostgreSQL service container
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: taskmanager_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/taskmanager_db
 
     steps:
       - name: Checkout code
@@ -71,11 +150,18 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install black
 
-      - name: Run Black code formatting check
+      - name: Wait for PostgreSQL to be ready
         run: |
-          python -m black backend/ --check
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          echo "✅ PostgreSQL is ready!"
+
+      - name: Run database migrations
+        run: |
+          alembic upgrade head
 
       - name: Run tests
         run: |
