@@ -34,6 +34,7 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/taskmanager_db
+      SECRET_KEY: test-secret-key-for-ci-only
 
     steps:
       - name: Checkout code
@@ -135,6 +136,7 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/taskmanager_db
+      SECRET_KEY: test-secret-key-for-ci-only
 
     steps:
       - name: Checkout code
