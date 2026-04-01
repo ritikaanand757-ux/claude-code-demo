@@ -15,7 +15,7 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     """Schema for user registration"""
 
-    password: str = Field(..., min_length=8, max_length=100)
+    password: str = Field(..., min_length=8, max_length=72)
 
 
 class UserResponse(UserBase):
@@ -63,10 +63,10 @@ class TaskBase(BaseModel):
 
 
 class TaskCreate(TaskBase):
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def high_priority_needs_due_date(self):
-        if self.priority == 'high' and self.due_date is None:
-            raise ValueError('High priority tasks must have a due date')
+        if self.priority == "high" and self.due_date is None:
+            raise ValueError("High priority tasks must have a due date")
         return self
 
 
@@ -82,15 +82,15 @@ class TaskUpdate(BaseModel):
     due_date: Optional[datetime] = None
     completion_note: Optional[str] = None
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def validate_business_rules(self):
         # Completion note required when marking as done
-        if self.status == 'done' and not self.completion_note:
-            raise ValueError('Completion note required when marking task as done')
+        if self.status == "done" and not self.completion_note:
+            raise ValueError("Completion note required when marking task as done")
 
         # High priority tasks must have due date
-        if self.priority == 'high' and self.due_date is None:
-            raise ValueError('High priority tasks must have a due date')
+        if self.priority == "high" and self.due_date is None:
+            raise ValueError("High priority tasks must have a due date")
 
         return self
 
@@ -173,7 +173,9 @@ class ActivityLogResponse(BaseModel):
 
     id: int
     task_id: int
-    action: str = Field(..., description="Action type: status_change, created, updated, archived")
+    action: str = Field(
+        ..., description="Action type: status_change, created, updated, archived"
+    )
     old_value: Optional[str] = Field(None, description="Previous value before change")
     new_value: Optional[str] = Field(None, description="New value after change")
     changed_by: int = Field(..., description="User ID who made the change")
