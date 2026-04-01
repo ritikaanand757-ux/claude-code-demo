@@ -1,9 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(gh --version)",
-      "Bash(git add backend/models.py backend/routes.py backend/database.py tests/conftest.py tests/test_api.py tests/test_enhanced_api.py tests/test_refactored_api.py docs/API.md)",
-      "Bash(git commit -m \"$(cat <<''EOF''\ndocs: add comprehensive docstrings and API documentation\n\nBackend Documentation:\n- Add detailed module-level docstrings to all backend files\n- Document Task model with complete attribute descriptions\n- Enhance database.py with connection and session documentation\n- Expand routes.py module docstring with RESTful endpoint overview\n- CRUD operations already had excellent docstrings\n\nTest Documentation:\n- Add comprehensive module-level docstrings to all test files\n- Document pytest fixtures with detailed usage examples\n- Enhance conftest.py with fixture scope and purpose descriptions\n- Document test classes and their coverage areas\n- Include test coverage summaries in module docstrings\n\nAPI Documentation (docs/API.md):\n- Complete endpoint reference with all 9 endpoints\n- Request/response examples in JSON for every endpoint\n- Detailed query parameter tables with types and defaults\n- HTTP status code explanations (200, 201, 204, 404, 422)\n- Authentication notes (currently no auth, future JWT plans)\n- Data models with field descriptions\n- Error handling patterns and examples\n- Rate limiting recommendations\n- Interactive documentation links (Swagger/ReDoc)\n- Complete workflow examples with curl commands\n- Pagination, filtering, and search examples\n\nDocumentation Benefits:\n- Improves code maintainability and onboarding\n- Provides clear API contract for frontend developers\n- Enables auto-generated documentation tools\n- Facilitates testing and debugging\n- Follows Python PEP 257 docstring conventions\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+      "Bash:*"
     ],
     "deny": [],
     "ask": []
