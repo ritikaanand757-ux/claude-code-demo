@@ -16,6 +16,7 @@ A modern, full-stack task management application built with FastAPI, PostgreSQL,
 - [Environment Variables](#environment-variables)
 - [Database Migrations](#database-migrations)
 - [Running Tests](#running-tests)
+- [Continuous Integration (CI/CD)](#continuous-integration-cicd)
 - [Development](#development)
 - [Deployment](#deployment)
 - [Troubleshooting](#troubleshooting)
@@ -850,6 +851,139 @@ xdg-open htmlcov/index.html
 - `tests/test_api.py` - Basic API endpoint tests
 - `tests/test_enhanced_api.py` - Tests for search, stats, filtering
 - `tests/test_refactored_api.py` - Tests after code refactoring
+
+## Continuous Integration (CI/CD)
+
+The project includes GitHub Actions workflows that automate testing, code review, and quality checks.
+
+### GitHub Actions Workflows
+
+**Location:** `.github/workflows/claude-code-ci.yml`
+
+The CI workflow automatically runs on:
+- Every push to `main` branch
+- Every pull request to `main`
+- Manual trigger via GitHub UI
+
+### What Gets Automated
+
+1. **Automated Testing**
+   - Runs full test suite with pytest
+   - Generates coverage reports
+   - Uploads results to Codecov
+
+2. **AI Code Review** (Pull Requests only)
+   - Claude Code analyzes code changes
+   - Provides feedback on code quality
+   - Checks adherence to project guidelines (CLAUDE.md)
+
+3. **Documentation Checks**
+   - Verifies API docs match actual endpoints
+   - Ensures all functions have docstrings
+   - Validates documentation standards
+
+4. **Code Quality Analysis**
+   - Runs linting checks (flake8)
+   - Analyzes code for potential issues
+   - Provides improvement suggestions
+
+### Setting Up CI/CD
+
+**Prerequisites:**
+1. GitHub repository with this code
+2. Anthropic API key for Claude Code
+
+**Setup Steps:**
+
+1. **Add GitHub Secrets:**
+   - Go to: Repository Settings → Secrets and variables → Actions
+   - Add secret: `ANTHROPIC_API_KEY` (get from [Anthropic Console](https://console.anthropic.com/))
+
+2. **Enable GitHub Actions:**
+   - Go to Settings → Actions → General
+   - Allow all actions and reusable workflows
+   - Enable read and write permissions
+
+3. **Push to trigger workflow:**
+   ```bash
+   git add .
+   git commit -m "feat: add CI/CD workflow"
+   git push origin main
+   ```
+
+4. **Monitor workflow:**
+   - Go to **Actions** tab in GitHub
+   - View workflow runs and logs
+
+### Workflow Features
+
+**Headless CI Mode:**
+The workflow uses Claude Code in headless mode for automated analysis:
+
+```yaml
+claude --headless "Run pytest with coverage: pytest --cov=backend tests/"
+```
+
+**Parallel Execution:**
+Multiple jobs run in parallel for faster feedback:
+- Tests run independently from code review
+- Documentation checks run concurrently
+- Results are aggregated in summary job
+
+**Intelligent Fallbacks:**
+If Claude Code encounters issues, workflows fall back to direct commands:
+```yaml
+- name: Run tests directly (fallback)
+  if: failure()
+  run: pytest --cov=backend tests/
+```
+
+**Artifact Collection:**
+- Test coverage reports (XML and HTML)
+- Test execution reports
+- Code review feedback
+
+### Manual Trigger
+
+You can manually trigger the workflow:
+1. Go to **Actions** tab
+2. Select **Claude Code CI** workflow
+3. Click **Run workflow**
+4. Select branch and run
+
+### Cost Considerations
+
+**Important:** Claude Code uses the Anthropic API, which incurs costs.
+
+To minimize costs:
+- Workflow uses `continue-on-error: true` for optional checks
+- AI analysis runs only when beneficial (code review on PRs)
+- Set API usage limits in Anthropic Console
+- Monitor usage regularly
+
+### CI/CD Documentation
+
+For detailed CI/CD documentation, see:
+- `.github/workflows/README.md` - Complete workflow documentation
+- `.github/workflows/claude-code-ci.yml` - Workflow configuration
+
+### Viewing Results
+
+**Test Results:**
+- View in GitHub Actions logs
+- Check Codecov for coverage reports
+
+**Code Review Feedback:**
+- Available in workflow logs
+- Posted as PR comments (if configured)
+
+**Status Badges:**
+Add status badges to your README:
+
+```markdown
+![CI Status](https://github.com/your-username/claude-code-demo/workflows/Claude%20Code%20CI/badge.svg)
+[![codecov](https://codecov.io/gh/your-username/claude-code-demo/branch/main/graph/badge.svg)](https://codecov.io/gh/your-username/claude-code-demo)
+```
 
 ## Development
 
