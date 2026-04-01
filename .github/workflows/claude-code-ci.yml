@@ -1,10 +1,11 @@
 name: Claude Code CI
 
-# Trigger workflow on push to main and pull requests
+# Trigger workflow on push to main, feature/test-ci-demo, and pull requests
 on:
   push:
     branches:
       - main
+      - feature/test-ci-demo
   pull_request:
     branches:
       - main
