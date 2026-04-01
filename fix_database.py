@@ -34,10 +34,10 @@ try:
         hash_pw = "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYfqHqr3jSu"
         session.execute(text("""
             INSERT INTO users (id, username, email, hashed_password, is_active, created_at)
-            VALUES (1, 'admin', 'admin@taskmanager.local', :hash_pw, true, NOW())
+            VALUES (1, 'admin', 'admin@taskmanager.com', :hash_pw, true, NOW())
         """), {"hash_pw": hash_pw})
         session.commit()
-        print("✓ Created admin user (username: admin, password: admin123)")
+        print("✓ Created admin user (username: admin, email: admin@taskmanager.com, password: admin123)")
 
     # Step 2: Check tasks with NULL owner_id
     result = session.execute(text("SELECT COUNT(*) FROM tasks WHERE owner_id IS NULL"))
