@@ -1,10 +1,34 @@
+"""
+Test suite for enhanced Task Manager API features.
+
+This module contains comprehensive tests for advanced task features including:
+- Priority levels (low, medium, high)
+- Tag management
+- Due date handling
+- Filtering and search capabilities
+- Complex query combinations
+
+Test Coverage:
+    - Task creation with all enhanced fields
+    - Priority validation and filtering
+    - Completion status filtering
+    - Combined filter operations
+    - Tag and due date updates
+    - Complete CRUD workflow with enhanced features
+    - Edge cases and validation errors
+"""
 import pytest
 from fastapi import status
 from datetime import datetime, timedelta
 
 
 class TestEnhancedTaskAPI:
-    """Comprehensive test suite for enhanced Task API with priority, tags, and due dates"""
+    """
+    Test suite for enhanced Task API features.
+
+    This class tests all advanced functionality including priority management,
+    tag support, due dates, and complex filtering operations.
+    """
 
     def test_get_empty_tasks(self, client):
         """Test getting tasks when database is empty"""

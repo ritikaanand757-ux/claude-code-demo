@@ -5,6 +5,8 @@ psycopg2-binary==2.9.9
 alembic==1.12.1
 pydantic==2.5.0
 python-dotenv==1.0.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
 
 # Testing dependencies
 pytest==7.4.3

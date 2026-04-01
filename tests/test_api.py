@@ -1,9 +1,29 @@
+"""
+Test suite for basic Task Manager API endpoints.
+
+This module contains comprehensive tests for all CRUD operations on the Task API,
+including edge cases, error handling, and pagination functionality.
+
+Test Coverage:
+    - Root and health check endpoints
+    - Task creation (with and without optional fields)
+    - Task retrieval (single and multiple)
+    - Task updates (full and partial)
+    - Task deletion
+    - Pagination functionality
+    - Error cases (404, 422)
+"""
 import pytest
 from fastapi import status
 
 
 class TestTaskAPI:
-    """Test suite for Task API endpoints"""
+    """
+    Test suite for Task API endpoints.
+
+    This class contains all test cases for basic CRUD operations on tasks,
+    testing both successful operations and error conditions.
+    """
 
     def test_read_root(self, client):
         """Test the root endpoint"""

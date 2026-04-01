@@ -1,5 +1,22 @@
 """
-Tests for refactored API with CRUD separation and new endpoints
+Test suite for refactored API with CRUD separation and new endpoints.
+
+This module tests the refactored API structure where business logic is separated
+into CRUD operations, along with newly added advanced endpoints.
+
+Test Coverage:
+    - Search functionality across multiple fields
+    - Statistics endpoint for task analytics
+    - Bulk delete operations
+    - Advanced pagination with page parameter
+    - Combined filtering and pagination
+    - CRUD separation architecture
+    - Integration tests for complete workflows
+
+New Endpoints Tested:
+    - GET /api/tasks/search - Full-text search
+    - GET /api/tasks/stats - Task statistics
+    - POST /api/tasks/bulk/delete - Bulk deletion
 """
 import pytest
 from fastapi import status
@@ -7,7 +24,13 @@ from datetime import datetime, timedelta
 
 
 class TestRefactoredAPI:
-    """Test suite for refactored API structure"""
+    """
+    Test suite for refactored API structure.
+
+    This class verifies that the refactored code structure (with CRUD separation)
+    works correctly and tests all new advanced endpoints including search,
+    statistics, and bulk operations.
+    """
 
     def test_search_tasks(self, client):
         """Test search endpoint"""
