@@ -1,0 +1,5 @@
+e03a377 docs(routes): update endpoint documentation comments
+cbb0eb7 fix(auth): change admin email from .local to .com for validation
+83b5bae feat(auth): add login/logout UI with role-based permissions
+315b067 fix(db): add Python script to fix NULL owner_id in tasks
+c6a3893 fix(db): add SQL scripts to fix partially completed migration

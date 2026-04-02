@@ -1,0 +1,3 @@
+28b8fb4 fix(tests): fix bcrypt password length error and enable CI on all branches
+6e569c6 fix(permissions): enforce proper task update and delete permissions
+8b21475 feat(dev): add Makefile for common development commands
