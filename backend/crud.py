@@ -216,7 +216,7 @@ def create_task(db: Session, task: TaskCreate, owner_id: int) -> Task:
         Created Task object
     """
     task_data = task.model_dump()
-    task_data['owner_id'] = owner_id
+    task_data["owner_id"] = owner_id
     db_task = Task(**task_data)
     db.add(db_task)
     db.commit()
@@ -228,14 +228,18 @@ def create_task(db: Session, task: TaskCreate, owner_id: int) -> Task:
         task_id=db_task.id,
         action="created",
         changed_by=owner_id,
-        new_value=f"Task created with status '{db_task.status}'"
+        new_value=f"Task created with status '{db_task.status}'",
     )
 
     return db_task
 
 
 def update_task(
-    db: Session, task_id: int, task: TaskUpdate, current_user_id: int
+    db: Session,
+    task_id: int,
+    task: TaskUpdate,
+    current_user_id: int,
+    is_admin: bool = False,
 ) -> Optional[Task]:
     """
     Update an existing task with business rules and activity logging
@@ -245,6 +249,7 @@ def update_task(
         task_id: Task ID
         task: Task update data
         current_user_id: ID of user making the update
+        is_admin: Whether the user is an admin
 
     Returns:
         Updated Task object or None if not found
@@ -257,9 +262,15 @@ def update_task(
     if not db_task:
         return None
 
-    # Business Rule: Only owner can change status
+    # Business Rule: Only owner can update task (unless admin)
+    if db_task.owner_id != current_user_id and not is_admin:
+        raise HTTPException(
+            status_code=403, detail="Only task owner can update this task"
+        )
+
+    # Business Rule: Only owner can change status (even if admin, they must own it)
     if task.status and task.status != db_task.status:
-        if db_task.owner_id != current_user_id:
+        if db_task.owner_id != current_user_id and not is_admin:
             raise HTTPException(
                 status_code=403, detail="Only task owner can change status"
             )
@@ -294,7 +305,9 @@ def update_task(
     return db_task
 
 
-def delete_task(db: Session, task_id: int, current_user_id: int) -> bool:
+def delete_task(
+    db: Session, task_id: int, current_user_id: int, is_admin: bool = False
+) -> bool:
     """
     Delete a task with business rule validation
 
@@ -302,6 +315,7 @@ def delete_task(db: Session, task_id: int, current_user_id: int) -> bool:
         db: Database session
         task_id: Task ID
         current_user_id: ID of user attempting deletion
+        is_admin: Whether the user is an admin
 
     Returns:
         True if deleted, False if not found
@@ -314,14 +328,14 @@ def delete_task(db: Session, task_id: int, current_user_id: int) -> bool:
     if not db_task:
         return False
 
-    # Business Rule: Cannot delete in-progress tasks
-    if db_task.status == "in_progress":
+    # Business Rule: Cannot delete in-progress tasks (unless admin)
+    if db_task.status == "in_progress" and not is_admin:
         raise HTTPException(
             status_code=400, detail="Cannot delete tasks that are in progress"
         )
 
-    # Business Rule: Only owner can delete
-    if db_task.owner_id != current_user_id:
+    # Business Rule: Only owner can delete (admins can delete any task)
+    if db_task.owner_id != current_user_id and not is_admin:
         raise HTTPException(status_code=403, detail="Only task owner can delete")
 
     db.delete(db_task)

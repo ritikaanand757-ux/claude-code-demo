@@ -178,11 +178,16 @@ def update_task(
 
     - **task_id**: Task ID
     - All fields are optional - only provided fields will be updated
-    - Only task owner can change status
+    - Only task owner can update task (unless admin)
+    - Only task owner can change status (unless admin)
     - Completion note required when marking task as done
     """
     db_task = crud.update_task(
-        db=db, task_id=task_id, task=task, current_user_id=current_user.id
+        db=db,
+        task_id=task_id,
+        task=task,
+        current_user_id=current_user.id,
+        is_admin=current_user.is_admin,
     )
 
     if not db_task:
