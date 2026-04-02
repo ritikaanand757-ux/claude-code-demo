@@ -97,6 +97,9 @@ class Task(Base):
 
     # Relationships
     owner = relationship("User", backref="tasks")
+    activity_logs = relationship(
+        "ActivityLog", back_populates="task", cascade="all, delete-orphan"
+    )
 
     def to_dict(self):
         """
@@ -165,7 +168,9 @@ class ActivityLog(Base):
     __tablename__ = "activity_logs"
 
     id = Column(Integer, primary_key=True, index=True)
-    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False)
+    task_id = Column(
+        Integer, ForeignKey("tasks.id", ondelete="CASCADE"), nullable=False
+    )
     action = Column(String, nullable=False)
     old_value = Column(String, nullable=True)
     new_value = Column(String, nullable=True)
@@ -173,5 +178,5 @@ class ActivityLog(Base):
     changed_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
-    task = relationship("Task", backref="activity_logs")
+    task = relationship("Task", back_populates="activity_logs")
     user = relationship("User")

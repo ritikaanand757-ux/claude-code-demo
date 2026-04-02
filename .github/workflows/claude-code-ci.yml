@@ -1,10 +1,10 @@
 name: Claude Code CI
 
-# Trigger workflow on push to main and pull requests
+# Trigger workflow on push to ANY branch and pull requests to main
 on:
   push:
     branches:
-      - main
+      - '**'  # Trigger on all branches
   pull_request:
     branches:
       - main
@@ -179,11 +179,11 @@ jobs:
             exit 1
           fi
 
-  # Job 3: Auto Documentation Check - runs on merge to main
+  # Job 3: Auto Documentation Check - runs on every push
   auto-documentation-check:
     name: Auto Documentation Check
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push'
 
     steps:
       - name: Checkout code

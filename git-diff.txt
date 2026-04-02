@@ -1,0 +1,32 @@
+diff --git a/backend/routes.py b/backend/routes.py
+index 24afaff..8e352ef 100644
+--- a/backend/routes.py
++++ b/backend/routes.py
+@@ -35,6 +35,7 @@ from backend.schemas import (
+     ArchiveRequest,
+ )
+ 
++# Initialize the APIRouter for all task-related endpoints
+ router = APIRouter(prefix="/api/tasks", tags=["tasks"])
+ 
+ 
+@@ -203,10 +204,16 @@ def delete_task(
+     Delete a task (requires authentication)
+ 
+     - **task_id**: Task ID
+-    - Only task owner can delete
+-    - Cannot delete in-progress tasks
++    - Only task owner can delete (unless admin)
++    - Cannot delete in-progress tasks (unless admin)
++    - Admins can delete any task
+     """
+-    success = crud.delete_task(db=db, task_id=task_id, current_user_id=current_user.id)
++    success = crud.delete_task(
++        db=db,
++        task_id=task_id,
++        current_user_id=current_user.id,
++        is_admin=current_user.is_admin,
++    )
+ 
+     if not success:
+         raise HTTPException(

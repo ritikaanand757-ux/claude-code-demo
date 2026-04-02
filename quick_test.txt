@@ -1,0 +1,34 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.2, pytest-7.4.3, pluggy-1.6.0 -- C:\Program Files\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\2000185351\claude-code-demo
+plugins: anyio-3.7.1, cov-4.1.0
+collecting ... collected 1 item
+
+tests/test_auth.py::TestUserRegistration::test_register_success PASSED   [100%]
+
+============================== warnings summary ===============================
+backend\database.py:51
+  C:\Users\2000185351\claude-code-demo\backend\database.py:51: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    Base = declarative_base()
+
+..\AppData\Roaming\Python\Python312\site-packages\pydantic\_internal\_config.py:268
+..\AppData\Roaming\Python\Python312\site-packages\pydantic\_internal\_config.py:268
+..\AppData\Roaming\Python\Python312\site-packages\pydantic\_internal\_config.py:268
+  C:\Users\2000185351\AppData\Roaming\Python\Python312\site-packages\pydantic\_internal\_config.py:268: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.5/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+..\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:768
+  C:\Users\2000185351\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:768: PydanticDeprecatedSince20: `min_items` is deprecated and will be removed, use `min_length` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.5/migration/
+    warn('`min_items` is deprecated and will be removed, use `min_length` instead', DeprecationWarning)
+
+backend\routes.py:75
+  C:\Users\2000185351\claude-code-demo\backend\routes.py:75: DeprecationWarning: `regex` has been deprecated, please use `pattern` instead
+    priority: Optional[str] = Query(
+
+backend\routes.py:79
+  C:\Users\2000185351\claude-code-demo\backend\routes.py:79: DeprecationWarning: `regex` has been deprecated, please use `pattern` instead
+    status: Optional[str] = Query(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 1 passed, 7 warnings in 0.76s ========================

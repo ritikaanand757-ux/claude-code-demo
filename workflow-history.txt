@@ -1,0 +1,4 @@
+bd537d1 fix(ci): add SECRET_KEY environment variable for tests
+c78f22f fix(ci): add PostgreSQL service container for GitHub Actions
+2424900 refactor(ci): simplify GitHub Actions workflow
+923164b feat(ci): add GitHub Actions workflow with Claude Code integration

@@ -1,0 +1,15 @@
+name: Claude Code CI
+
+# Trigger workflow on push to main and pull requests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Job 1: Auto Test Runner - runs on every push to main
+  auto-test-runner:
+    name: Auto Test Runner

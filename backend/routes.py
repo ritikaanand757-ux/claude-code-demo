@@ -35,6 +35,7 @@ from backend.schemas import (
     ArchiveRequest,
 )
 
+# Initialize the APIRouter for all task-related endpoints
 router = APIRouter(prefix="/api/tasks", tags=["tasks"])
 
 
@@ -177,11 +178,16 @@ def update_task(
 
     - **task_id**: Task ID
     - All fields are optional - only provided fields will be updated
-    - Only task owner can change status
+    - Only task owner can update task (unless admin)
+    - Only task owner can change status (unless admin)
     - Completion note required when marking task as done
     """
     db_task = crud.update_task(
-        db=db, task_id=task_id, task=task, current_user_id=current_user.id
+        db=db,
+        task_id=task_id,
+        task=task,
+        current_user_id=current_user.id,
+        is_admin=current_user.is_admin,
     )
 
     if not db_task:
@@ -203,10 +209,16 @@ def delete_task(
     Delete a task (requires authentication)
 
     - **task_id**: Task ID
-    - Only task owner can delete
-    - Cannot delete in-progress tasks
+    - Only task owner can delete (unless admin)
+    - Cannot delete in-progress tasks (unless admin)
+    - Admins can delete any task
     """
-    success = crud.delete_task(db=db, task_id=task_id, current_user_id=current_user.id)
+    success = crud.delete_task(
+        db=db,
+        task_id=task_id,
+        current_user_id=current_user.id,
+        is_admin=current_user.is_admin,
+    )
 
     if not success:
         raise HTTPException(
